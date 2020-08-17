@@ -31,20 +31,23 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Input arguments
-if len(sys.argv) < 4:
+if len(sys.argv) < 5:
     raise ValueError("""Please insert: 
     number of qbits 
     cost function type 
-    number of edges""")
+    number of edges
+    algorithm""")
 
 n_n     = sys.argv[1]
 n_cost  = sys.argv[2]
 n_E     = sys.argv[3]
+n_algo  = sys.argv[4]
 
 # Print input values
 print("Cost function: {0}".format(n_cost))
 print("N vertices:    {0}".format(n_n))
 print("N edges:       {0}".format(n_E))
+print("Algorithm:     {0}".format(n_algo))
     
 # Create random Max-Cut problem
 # Number of vertices
@@ -68,22 +71,26 @@ mean_eig = np.mean(eigenvalues)
 # Variables declaration
 WEIGHTS       = W2
 N_QBITS       = n
-DEPTH         = 2
+if n_algo == "VQE": 
+    DEPTH     = 2
+elif n_algo == "QAOA": 
+    DEPTH     = 2*N_QBITS
 BACKEND       = 'qasm_simulator'
 FINAL_EVAL    = 128
 COST          = n_cost
+ALGORITHM     = n_algo
 N_repetitions = 100
 shots_list    = [1, 2, 4, 8, 12, 16, 24, 32, 64, 96, 128, 256]
 
 
 # Load results
-load_string = "../files/{0}qbits_{1}edges_{2}/Scan".format(N_QBITS, E, COST) 
+load_string = "../files/{0}/{1}qbits_{2}edges_{3}/Scan".format(n_algo, N_QBITS, E, COST) 
 results = load_files(load_string, shots_list)
 df, df_plot = analyze_results(results, shots_list, W2, brute_solution, COST)
 
 
 # Create folder for figures
-folder_name = "figures/{0}qbits_{1}edges_{2}/".format(N_QBITS, E, COST)
+folder_name = "figures/{0}/{1}qbits_{2}edges_{3}/".format(n_algo, N_QBITS, E, COST)
 save_command = "mkdir -p {0}".format(folder_name)
 os.system(save_command)
 

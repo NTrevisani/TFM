@@ -25,16 +25,17 @@ n_cost  = "mean"
 n_alpha = 1
 
 # Input arguments
-if len(sys.argv) < 2:
+if len(sys.argv) < 3:
     raise ValueError("""Please insert 
-    cost function """)
+    cost function 
+    algorithm""")
 
 n_cost  = sys.argv[1]
-#n_alpha = sys.argv[2]
+n_algo = sys.argv[2]
 
 # Print input values
 print("Cost function: {0}".format(n_cost))
-#print("Alpha:         {0}".format(n_alpha))
+print("Algorithm:     {0}".format(n_algo))
     
 # Create random Max-Cut problem
 # Number of vertices
