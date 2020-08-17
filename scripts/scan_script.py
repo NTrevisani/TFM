@@ -3,7 +3,7 @@ import sys, os
 os.system("cp ../Functions.py .")
 
 # Loading all functions (maybe not needed, at least not ALL)
-from Functions import cost_function_C, VQE_circuit, cost_function_cobyla, time_vs_shots
+from Functions import cost_function_C, VQE_circuit, QAOA_circuit, cost_function_cobyla, time_vs_shots
 from Functions import scatter_plot, best_candidate_finder, F_opt_finder, cv_a_r, save_object
 from Functions import plot_comparison, random_graph_producer, brute_force_solver, PI
 from Functions import load_files, analyze_results
@@ -16,19 +16,21 @@ n_n = 10
 n_E = int(0.5*n_n*(n_n-1))
 
 # Input arguments
-if len(sys.argv) < 4:
+if len(sys.argv) < 5:
     raise ValueError("""Please insert 
     number of shots 
     cost function type 
     CVaR alpha value
     number of vertices
-    number of edges""")
+    number of edges
+    algorithm""")
 
 n_shots = sys.argv[1]
 n_cost  = sys.argv[2]
 n_alpha = sys.argv[3]
 n_n     = sys.argv[4]
 n_E     = sys.argv[5]
+n_algo  = sys.argv[6]
 
 # Print input values
 print("Shots:         {0}".format(n_shots))
@@ -36,6 +38,7 @@ print("Cost function: {0}".format(n_cost))
 print("Alpha:         {0}".format(n_alpha))
 print("N vertices:    {0}".format(n_n))
 print("N edges:       {0}".format(n_E))
+print("Algorithm:     {0}".format(n_algo))
     
 # Create random Max-Cut problem
 # Number of vertices
@@ -54,21 +57,25 @@ W2 = random_graph_producer(n, E, seed, verbosity=True)
 # Variables declaration
 WEIGHTS       = W2
 N_QBITS       = n
-DEPTH         = 2
+if n_algo == "VQE": 
+    DEPTH     = 2
+elif n_algo == "QAOA": 
+    DEPTH     = 2*N_QBITS
 SHOTS         = int(n_shots)
 BACKEND       = 'qasm_simulator'
 FINAL_EVAL    = 128
 COST          = n_cost
 ALPHA         = float(n_alpha)
 N_repetitions = 100
+ALGORITHM     = n_algo
 
 
 # Create folder for output file
 folder_name = ""
 if COST == 'cost':
-    folder_name = "files/{0}qbits_{1}edges_mean".format(n, E)
+    folder_name = "files/{0}/{1}qbits_{2}edges_mean".format(n_algo, n, E)
 elif COST == 'cvar':
-    folder_name = "files/{0}qbits_{1}edges_cvar_{2}".format(n, E, n_alpha)
+    folder_name = "files/{0}/{1}qbits_{2}edges_cvar_{3}".format(n_algo, n, E, n_alpha)
 save_command = "mkdir -p {0}".format(folder_name)
 os.system(save_command)
 
