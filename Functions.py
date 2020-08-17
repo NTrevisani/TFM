@@ -150,12 +150,12 @@ def QAOA_circuit(gamma_beta, QUBO, depth):
     # prepare the quantum and classical registers
     n_vertices = len(QUBO)
 
-    if len(gamma_beta) != 2*depth + n_vertices:
-        raise ValueError("'gamma_beta' parameter length must be equal to twice 'depth' parameter plus the number of vertices")
+    if len(gamma_beta) != 2*depth: # + n_vertices:
+        raise ValueError("'gamma_beta' parameter length must be equal to twice 'depth' parameter")# plus the number of vertices")
 
     gamma = gamma_beta[0:depth]
     beta  = gamma_beta[depth:2*depth]
-    theta = gamma_beta[2*depth:2*depth + n_vertices]
+    #theta = gamma_beta[2*depth:2*depth + n_vertices]
     
     # Define the Quantum and Classical Registers
     q = QuantumRegister(n_vertices)
@@ -165,9 +165,9 @@ def QAOA_circuit(gamma_beta, QUBO, depth):
     circuit = QuantumCircuit(q, c)
 
     # apply the layer of Hadamard gates to all qubits
-    #circuit.h(range(n_vertices))
-    for i in range(n_vertices):
-        circuit.ry(theta[i],q[i])
+    circuit.h(range(n_vertices))
+    #for i in range(n_vertices):
+    #    circuit.ry(theta[i],q[i])
     circuit.barrier()
     
     # Repeat the circuit structure 'depth' times
@@ -179,13 +179,14 @@ def QAOA_circuit(gamma_beta, QUBO, depth):
                     circuit.cu1(-2*gamma[k]*QUBO[i,j], i, j)
                     circuit.u1(gamma[k], i)
                     circuit.u1(gamma[k], j)
-    
-        # then apply the single qubit X-rotations with angle beta to all qubits
         circuit.barrier()
+        
+        # then apply the single qubit X-rotations with angle beta to all qubits
         circuit.rx(2*beta[k], range(n_vertices))
+        circuit.barrier()
 
     # Finally measure the result in the computational basis
-    circuit.barrier()
+    #circuit.barrier()
     circuit.measure(range(n_vertices),range(n_vertices))
     
     return circuit    
@@ -321,8 +322,9 @@ def time_vs_shots(shots,
             theta         = np.concatenate((theta_0, theta_1), axis = 0) 
         elif algorithm == "QAOA":
             theta_0 = np.zeros(2*depth)
-            theta_1 = np.repeat(PI/2, n_qbits)
-            theta   = np.concatenate((theta_0, theta_1), axis = 0) 
+            #theta_1 = np.repeat(PI/2, n_qbits)
+            #theta   = np.concatenate((theta_0, theta_1), axis = 0) 
+            theta   = theta_0
     
     # Time starts with the optimization
     start_time = time.time()
