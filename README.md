@@ -1,2 +1,2 @@
 # TFM
-Repository for the master's thesis VQE and QAOA quantum algorithms
+Repository for the master's thesis studying the VQE and QAOA quantum algorithms
