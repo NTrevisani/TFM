@@ -331,10 +331,10 @@ def time_vs_shots(shots,
 
     # Classical optimizer tuning
     res = minimize(fun     = cost_function_cobyla, 
-                   x0      = theta.ravel(),     # the 'params' argument of 'cost_function_cobyla'
-                   method  = 'COBYLA',          # we want to use the COBYLA optimization algorithm
-                   options = {'maxiter': 500},  # maximum number of iterations
-                   tol     = 0.0001,            # tolerance or final accuracy in the optimization 
+                   x0      = theta.ravel(),       # the 'params' argument of 'cost_function_cobyla'
+                   method  = 'COBYLA',            # we want to use the COBYLA optimization algorithm
+                   options = {'maxiter': 10000},  # maximum number of iterations
+                   tol     = 0.0001,              # tolerance or final accuracy in the optimization 
                    args    = (weights, 
                               n_qbits, 
                               depth, 
@@ -398,6 +398,9 @@ def scatter_plot(x, y,
                  n_rep = 100,
                  do_fit = False, fit_func = 0,
                  x_err = 0, y_err = 0):
+
+    print("Plotting {0}".format(save_as))
+
     # Plot declaration
     fig, ax = plt.subplots()
     #local_plot = ax.scatter(x = x,
@@ -660,7 +663,7 @@ def plot_comparison(x, y, legend, leg_loc = "upper right",
     """
     fig, ax = plt.subplots()
 
-    print("Printing {0}".format(save_as))
+    print("Plotting {0}".format(save_as))
     
     if x_err == []:
         x_err = np.zeros(len(x))
@@ -906,6 +909,93 @@ def analyze_results(scan,
     df_plot["cost_std_dev"] = df_std_dev["cost"]    
     
     return df, df_plot
+
+
+# Define as a function to test the convergence of a circuit 
+# to the proper cost function value
+def convergence_tester(n_qbits, n_edges, depth, 
+                       shots, repetitions = 100,
+                       reference_shots = 50000,
+                       x0 = "random"):
+    """Test the convergence of a circuit vs number of measurements.
+    
+    The function creates a random max-cut problem of a given number
+    of vertices and edges and a VQE circuit of some given parameters
+    to solve it. It returns the expected cost function obtained with 
+    a high number of shots and the cost function distribution
+    obtained repeating the measurement with a smaller number of shots.
+    The circuit rotation angles can be passed as input, otherwise they 
+    will be random.
+    
+    Parameters
+    n_qbits: circuit number of qbits and equivalently, max-cut graph 
+        vertices;
+    n_edges: max-cut graph number of edges;
+    depth: VQE circuit depth;
+    shots: smaller number of shots (for the repeated measurement);
+    repetitions: number of repeated measurements with small number 
+        of shots;
+    reference_shots: number of shots used to compute the reference
+        cost function value;
+    x0: circuit rotation angles.
+    """
+    
+    # Create random max-cut problem 
+    M = random_graph_producer(n_vert = n_qbits, 
+                              n_edge = n_edges, 
+                              seed = 2000, 
+                              verbosity = False)
+    
+    # Get the solution
+    brute_solution, brute_cost, eig = brute_force_solver(M, verbosity = False)
+        
+    # Circuit rotation angles
+    if x0 == "random":
+        print("Random angle choice")
+        theta_0       = np.random.rand(n_qbits)*2*PI
+        theta_0.shape = (1, n_qbits)
+        theta_1       = np.random.rand(depth, n_qbits)*2*PI
+        x0            = np.concatenate((theta_0, theta_1), axis = 0) 
+        
+    # Create the VQE circuit
+    circuit = VQE_circuit(x0, n_qbits, depth)
+
+    # Execute the circuit with large amount of shots
+    reference_job = execute(circuit, 
+                            backend = Aer.get_backend('qasm_simulator'), 
+                            shots   = reference_shots)
+
+    # Extract the results
+    reference_result = reference_job.result()
+
+    # Get eigenstates distribution - as a dictionary
+    reference_eigenstates = reference_result.get_counts(circuit)
+
+    # Get the cost function
+    reference_cost = cost_function_C(reference_eigenstates, M)
+
+    # Initialize output
+    small_eigenstates = []
+    small_cost        = []
+    
+    # Now execute several times the circuit, but using a smaller 
+    # number of shots
+    for i in range(repetitions):
+        job = execute(circuit, 
+                      backend = Aer.get_backend('qasm_simulator'), 
+                      shots   = shots)
+        
+        # Get the results
+        result = job.result()
+        eigenstates = result.get_counts(circuit)
+        cost = cost_function_C(eigenstates, M)
+    
+        # Append the results to the output
+        small_eigenstates.append(eigenstates)
+        small_cost.append(cost)
+        
+    # Finally, the output
+    return reference_eigenstates, reference_cost, small_eigenstates, small_cost
 
 
 # QUBO matrix used as example
