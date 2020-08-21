@@ -51,7 +51,7 @@ theta_1       = np.zeros((n_depth, n_qbits))
 x_0           = np.concatenate((theta_0, theta_1), axis = 0) 
 
 # Variables definition
-shots_list    = [1, 2, 4, 8, 12, 16, 24, 32, 64, 96, 128, 256]
+shots_list    = [1, 2, 4, 8, 12, 16, 24, 32, 64, 96, 128, 256, 512]
 rep           = 1000
 
 # Create folder for figures
