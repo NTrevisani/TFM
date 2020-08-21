@@ -60,7 +60,7 @@ N_QBITS       = n
 if n_algo == "VQE": 
     DEPTH     = 2
 elif n_algo == "QAOA": 
-    DEPTH     = 2*N_QBITS
+    DEPTH     = 6
 SHOTS         = int(n_shots)
 BACKEND       = 'qasm_simulator'
 FINAL_EVAL    = 128
