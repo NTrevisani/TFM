@@ -82,6 +82,11 @@ for shot in shots_list:
                        range = (-1.5*brute_cost, 0), 
                        density = True)
 
+    if shot == 1:
+        ax.set_title("Cost function distribution using {0} shot".format(shot))
+    else:
+        ax.set_title("Cost function distribution using {0} shots".format(shot))
+        
     ax.text(0.05, 0.90, "Reference = {:.1f}".format(ref_cost), 
             transform=ax.transAxes)
     ax.text(0.05, 0.84, "Mean = {:.1f}".format(np.mean(test_cost)), 
