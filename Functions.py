@@ -916,7 +916,7 @@ def analyze_results(scan,
 def convergence_tester(n_qbits, n_edges, depth, 
                        shots, repetitions = 100,
                        reference_shots = 50000,
-                       x0 = "random"):
+                       x0 = -1):
     """Test the convergence of a circuit vs number of measurements.
     
     The function creates a random max-cut problem of a given number
@@ -950,7 +950,7 @@ def convergence_tester(n_qbits, n_edges, depth,
     brute_solution, brute_cost, eig = brute_force_solver(M, verbosity = False)
         
     # Circuit rotation angles
-    if x0 == "random":
+    if x0.any == -1:
         print("Random angle choice")
         theta_0       = np.random.rand(n_qbits)*2*PI
         theta_0.shape = (1, n_qbits)
