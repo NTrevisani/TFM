@@ -279,8 +279,8 @@ def time_vs_shots(shots,
                   final_eval_shots,
                   cost,
                   alpha = 0.5,
-                  theta = 1,
                   algorithm = "VQE",
+                  theta = 1,
                   verbosity = False):
     """Returns the time taken to solve a VQE problem
     as a function of the shots.    
