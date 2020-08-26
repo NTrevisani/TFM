@@ -45,6 +45,21 @@ QAOA
 ---
 10-qbits problem
 python3 loop_scan.py cost 1   10 22 QAOA
+
+11-qbits problem
+python3 loop_scan.py cost 1   11 27 QAOA
+
+12-qbits problem
+python3 loop_scan.py cost 1   12 33 QAOA
+
+13-qbits problem
+python3 loop_scan.py cost 1   13 39 QAOA
+
+16-qbits problem
+python3 loop_scan.py cost 1   16 60 QAOA
+
+18-qbits problem
+python3 loop_scan.py cost 1   18 76 QAOA
 """
 
 import sys, os
