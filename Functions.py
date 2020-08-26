@@ -686,6 +686,8 @@ def plot_comparison(x, y, legend, leg_loc = "upper right",
     # Title
     ax.set_title(title)
 
+    fig.subplots_adjust(left=0.15)
+    
     # Cosmetics
     if ylim == (-9999, -9999):
         ax.set_ylim(0.0, 1.5*np.max(y))
