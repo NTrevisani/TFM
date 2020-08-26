@@ -60,7 +60,7 @@ N_QBITS       = n
 if n_algo == "VQE": 
     DEPTH     = 2
 elif n_algo == "QAOA": 
-    DEPTH     = 6
+    DEPTH     = 2
 SHOTS         = int(n_shots)
 BACKEND       = 'qasm_simulator'
 FINAL_EVAL    = 128
@@ -92,7 +92,9 @@ for rep in range(N_repetitions):
                            DEPTH,
                            BACKEND,
                            FINAL_EVAL,
-                           COST)
+                           COST,
+                           ALPHA,
+                           ALGORITHM)
 
     if rep % 20 == 0:
         print("Done with", str(SHOTS), "shots, repetition", rep)
