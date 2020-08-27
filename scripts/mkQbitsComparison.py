@@ -25,6 +25,9 @@ from Functions import load_files, analyze_results
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.set_palette("Blues")
 
 # Declare these variables in case they are not passed as input arguments
 n_n     = 10
