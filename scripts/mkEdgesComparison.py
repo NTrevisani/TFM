@@ -4,6 +4,10 @@ VQE
 python mkEdgesComparison.py mean     VQE
 python mkEdgesComparison.py cvar_0.5 VQE
 python mkEdgesComparison.py cvar_0.2 VQE
+
+QAOA
+===
+python mkEdgesComparison.py mean     QAOA
 """
 
 import sys, os
@@ -207,19 +211,19 @@ plot_comparison(x       = [df["shots"] for df in df_plot],
 #                 leg_loc = "upper right",
 #                 save_as = save_name)
 
-# Relative solution cost function vs shots
-save_name = folder_name + "rel_cost_vs_shots"
+# # Relative solution cost function vs shots
+# save_name = folder_name + "rel_cost_vs_shots"
 
-plot_comparison(x       = [df["shots"] for df in df_plot],
-                y       = [df_plot[i]["cost"]/brute_cost[i] for i in range(len(N_QBITS))],
-                legend  = legend_list,
-                title   = "Relative solution cost function vs shots",
-                xlabel  = "Shots",
-                ylabel  = "Relative cost function",
-                ylim    = (-1, 0),
-                leg_loc = "upper right",
-                leg_col = 3,
-                save_as = save_name)
+# plot_comparison(x       = [df["shots"] for df in df_plot],
+#                 y       = [df_plot[i]["cost"]/brute_cost[i] for i in range(len(N_QBITS))],
+#                 legend  = legend_list,
+#                 title   = "Relative solution cost function vs shots",
+#                 xlabel  = "Shots",
+#                 ylabel  = "Relative cost function",
+#                 ylim    = (-1, 0),
+#                 leg_loc = "upper right",
+#                 leg_col = 3,
+#                 save_as = save_name)
 
 
 # # Fraction of good solutions vs shots/(Hilbert space dimension)
@@ -265,29 +269,29 @@ plot_comparison(x       = [df["shots"] for df in df_plot],
 #                 leg_col = 3,
 #                 save_as = save_name)
 
-# Difference with mean cost function value vs shots
-# (Brute cost is positive)
-save_name = folder_name + "diff_mean_vs_shots"
-#y_unc = [df["cost"] / np.sqrt(N_repetitions * 128) for df in df_plot]
+# # Difference with mean cost function value vs shots
+# # (Brute cost is positive)
+# save_name = folder_name + "diff_mean_vs_shots"
+# y_unc = [df["cost_std_dev"] for df in df_plot]
 
-plot_comparison(x       = [df["shots"] for df in df_plot],
-                y       = [mean_eig[j] + df_plot[j]["cost"] for j in range(len(brute_cost))],
-                legend  = legend_list,
-                title   = "Difference with mean cost function value vs shots",
-                xlabel  = "Shots",
-                ylabel  = "Difference with mean cost function",
-                leg_loc = "upper left",
-                ylim    = (-max([(brute_cost[j] - mean_eig[j]) for j in range(len(brute_cost))]),
-                           0.5*max([(brute_cost[j] - mean_eig[j]) for j in range(len(brute_cost))])),
-                #y_err   = y_unc, 
-                leg_col = 3,
-                save_as = save_name)
+# plot_comparison(x       = [df["shots"] for df in df_plot],
+#                 y       = [mean_eig[j] + df_plot[j]["cost"] for j in range(len(brute_cost))],
+#                 legend  = legend_list,
+#                 title   = "Difference with mean cost function value vs shots",
+#                 xlabel  = "Shots",
+#                 ylabel  = "Difference with mean cost function",
+#                 leg_loc = "upper left",
+#                 ylim    = (-max([(brute_cost[j] - mean_eig[j]) for j in range(len(brute_cost))]),
+#                            0.5*max([(brute_cost[j] - mean_eig[j]) for j in range(len(brute_cost))])),
+#                 #y_err   = y_unc, 
+#                 leg_col = 3,
+#                 save_as = save_name)
 
 
 # Difference with mean cost function value vs 1/sqrt(shots)
 # (Brute cost is positive)
 save_name = folder_name + "diff_mean_vs_inv_shots"
-y_unc = [df["cost"] / np.sqrt(N_repetitions * 128) for df in df_plot]
+y_unc = [df["cost_std_dev"] for df in df_plot]
 
 plot_comparison(x       = [1 / np.sqrt(df["shots"]) for df in df_plot],
                 y       = [mean_eig[j] + df_plot[j]["cost"] for j in range(len(brute_cost))],
@@ -319,22 +323,22 @@ plot_comparison(x       = [1 / np.sqrt(df["shots"]) for df in df_plot],
 #                 leg_col = 3,
 #                 save_as = save_name)
 
-# Difference with mean cost function over std_dev(eig) vs 1/sqrt(shots)
-# (Brute cost is positive)
-save_name = folder_name + "diff_mean_o_std_eig_vs_inv_shots"
-#y_unc = [df["cost"] / np.sqrt(N_repetitions) for df in df_plot]
+# # Difference with mean cost function over std_dev(eig) vs 1/sqrt(shots)
+# # (Brute cost is positive)
+# save_name = folder_name + "diff_mean_o_std_eig_vs_inv_shots"
+# #y_unc = [df["cost"] / np.sqrt(N_repetitions) for df in df_plot]
 
-plot_comparison(x       = [1 / np.sqrt(df["shots"]) for df in df_plot],
-                y       = [(mean_eig[j] + df_plot[j]["cost"]) / std_dev_eig[j] for j in range(len(brute_cost))],
-                legend  = legend_list,
-                title   = r"Difference with mean cost function over $\sigma(eigenvalues)$ vs $\frac{1}{\sqrt{Shots}}$",
-                xlabel  = r"$1 / \sqrt{Shots}$",
-                ylabel  = "Difference with mean cost function over $\sigma(eigenvalues)$",
-                leg_loc = "upper left",
-                ylim    = (-max([(brute_cost[j] - mean_eig[j]) / std_dev_eig[j] for j in range(len(brute_cost))]),
-                           0.5*max([(brute_cost[j] - mean_eig[j]) / std_dev_eig[j] for j in range(len(brute_cost))])),
-                leg_col = 3,
-                save_as = save_name)
+# plot_comparison(x       = [1 / np.sqrt(df["shots"]) for df in df_plot],
+#                 y       = [(mean_eig[j] + df_plot[j]["cost"]) / std_dev_eig[j] for j in range(len(brute_cost))],
+#                 legend  = legend_list,
+#                 title   = r"Difference with mean cost function over $\sigma(eigenvalues)$ vs $\frac{1}{\sqrt{Shots}}$",
+#                 xlabel  = r"$1 / \sqrt{Shots}$",
+#                 ylabel  = "Difference with mean cost function over $\sigma(eigenvalues)$",
+#                 leg_loc = "upper left",
+#                 ylim    = (-max([(brute_cost[j] - mean_eig[j]) / std_dev_eig[j] for j in range(len(brute_cost))]),
+#                            0.5*max([(brute_cost[j] - mean_eig[j]) / std_dev_eig[j] for j in range(len(brute_cost))])),
+#                 leg_col = 3,
+#                 save_as = save_name)
 
 
 # # Difference with mean cost function times std_dev(eig) vs sqrt(Hilbert space dimension/shots)
@@ -353,22 +357,22 @@ plot_comparison(x       = [1 / np.sqrt(df["shots"]) for df in df_plot],
 #                 leg_col = 3,
 #                 save_as = save_name)
 
-# Difference with mean cost function times std_dev(eig) vs 1/sqrt(shots)
-# (Brute cost is positive)
-save_name = folder_name + "diff_mean_times_std_eig_vs_inv_shots"
-#y_unc = [df["cost"] / np.sqrt(N_repetitions) for df in df_plot]
+# # Difference with mean cost function times std_dev(eig) vs 1/sqrt(shots)
+# # (Brute cost is positive)
+# save_name = folder_name + "diff_mean_times_std_eig_vs_inv_shots"
+# #y_unc = [df["cost"] / np.sqrt(N_repetitions) for df in df_plot]
 
-plot_comparison(x       = [1 / np.sqrt(df["shots"]) for df in df_plot],
-                y       = [(mean_eig[j] + df_plot[j]["cost"]) * std_dev_eig[j] for j in range(len(brute_cost))],
-                legend  = legend_list,
-                title   = r"Difference with mean cost function times $\sigma(eigenvalues)$ vs $\frac{1}{\sqrt{Shots}}$",
-                xlabel  = r"$1 / \sqrt{Shots}$",
-                ylabel  = "Difference with mean cost function times $\sigma(eigenvalues)$",
-                leg_loc = "upper left",
-                ylim    = (-max([(brute_cost[j] - mean_eig[j]) * std_dev_eig[j] for j in range(len(brute_cost))]),
-                           0.5*max([(brute_cost[j] - mean_eig[j]) * std_dev_eig[j] for j in range(len(brute_cost))])),
-                leg_col = 3,
-                save_as = save_name)
+# plot_comparison(x       = [1 / np.sqrt(df["shots"]) for df in df_plot],
+#                 y       = [(mean_eig[j] + df_plot[j]["cost"]) * std_dev_eig[j] for j in range(len(brute_cost))],
+#                 legend  = legend_list,
+#                 title   = r"Difference with mean cost function times $\sigma(eigenvalues)$ vs $\frac{1}{\sqrt{Shots}}$",
+#                 xlabel  = r"$1 / \sqrt{Shots}$",
+#                 ylabel  = "Difference with mean cost function times $\sigma(eigenvalues)$",
+#                 leg_loc = "upper left",
+#                 ylim    = (-max([(brute_cost[j] - mean_eig[j]) * std_dev_eig[j] for j in range(len(brute_cost))]),
+#                            0.5*max([(brute_cost[j] - mean_eig[j]) * std_dev_eig[j] for j in range(len(brute_cost))])),
+#                 leg_col = 3,
+#                 save_as = save_name)
 
 
 # # Relative difference with mean cost function value vs sqrt(Hilbert space dimension/shots)
@@ -391,6 +395,7 @@ plot_comparison(x       = [1 / np.sqrt(df["shots"]) for df in df_plot],
 # Relative difference with mean cost function value vs 1/sqrt(shots)   
 # (Brute cost is positive)
 save_name = folder_name + "rel_diff_mean_vs_inv_shots"
+y_unc = [df_plot[j]["cost_std_dev"] / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))]
 
 plot_comparison(x       = [1 / np.sqrt(df["shots"]) for df in df_plot],
                 y       = [(mean_eig[j] + df_plot[j]["cost"]) / (abs(mean_eig[j] - brute_cost[j]))
@@ -403,61 +408,62 @@ plot_comparison(x       = [1 / np.sqrt(df["shots"]) for df in df_plot],
                 ylim    = (-max([(brute_cost[j] - mean_eig[j]) / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))]),
                            0.5*max([(brute_cost[j] - mean_eig[j]) / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))])),
                 leg_col = 3,
+                y_err   = y_unc,
                 save_as = save_name)
 
 
-# Relative difference with mean cost function value vs shots
-# (Brute cost is positive)
-save_name = folder_name + "rel_diff_mean_vs_shots"
+# # Relative difference with mean cost function value vs shots
+# # (Brute cost is positive)
+# save_name = folder_name + "rel_diff_mean_vs_shots"
 
-plot_comparison(x       = [df["shots"] for df in df_plot],
-                y       = [(mean_eig[j] + df_plot[j]["cost"]) / (abs(mean_eig[j] - brute_cost[j]))
-                           for j in range(len(brute_cost))],
-                legend  = legend_list,
-                title   = "Relative difference with mean cost function value vs shots",
-                xlabel  = "shots",
-                ylabel  = "Relative difference with mean cost function ",
-                leg_loc = "upper left",
-                ylim    = (-max([(brute_cost[j] - mean_eig[j]) / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))]),
-                           0.5*max([(brute_cost[j] - mean_eig[j]) / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))])),
-                leg_col = 3,
-                save_as = save_name)
-
-
-# Relative difference with mean cost function value vs sqrt(shots)
-# (Brute cost is positive)
-save_name = folder_name + "rel_diff_mean_vs_sqrt_shots"
-
-plot_comparison(x       = [np.sqrt(df["shots"]) for df in df_plot],
-                y       = [(mean_eig[j] + df_plot[j]["cost"]) / (abs(mean_eig[j] - brute_cost[j]))
-                           for j in range(len(brute_cost))],
-                legend  = legend_list,
-                title   = r"Relative difference with mean cost function value vs $\sqrt{shots}$",
-                xlabel  = r"\sqrt{shots}",
-                ylabel  = "Relative difference with mean cost function ",
-                leg_loc = "upper left",
-                ylim    = (-max([(brute_cost[j] - mean_eig[j]) / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))]),
-                           0.5*max([(brute_cost[j] - mean_eig[j]) / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))])),
-                leg_col = 3,
-                save_as = save_name)
+# plot_comparison(x       = [df["shots"] for df in df_plot],
+#                 y       = [(mean_eig[j] + df_plot[j]["cost"]) / (abs(mean_eig[j] - brute_cost[j]))
+#                            for j in range(len(brute_cost))],
+#                 legend  = legend_list,
+#                 title   = "Relative difference with mean cost function value vs shots",
+#                 xlabel  = "shots",
+#                 ylabel  = "Relative difference with mean cost function ",
+#                 leg_loc = "upper left",
+#                 ylim    = (-max([(brute_cost[j] - mean_eig[j]) / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))]),
+#                            0.5*max([(brute_cost[j] - mean_eig[j]) / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))])),
+#                 leg_col = 3,
+#                 save_as = save_name)
 
 
-# Relative difference with mean cost function value vs 1/shots
-# (Brute cost is positive)
-save_name = folder_name + "rel_diff_mean_vs_1_o_shots"
+# # Relative difference with mean cost function value vs sqrt(shots)
+# # (Brute cost is positive)
+# save_name = folder_name + "rel_diff_mean_vs_sqrt_shots"
 
-plot_comparison(x       = [1 / df["shots"] for df in df_plot],
-                y       = [(mean_eig[j] + df_plot[j]["cost"]) / (abs(mean_eig[j] - brute_cost[j]))
-                           for j in range(len(brute_cost))],
-                legend  = legend_list,
-                title   = r"Relative difference with mean cost function value vs $\sqrt{shots}$",
-                xlabel  = "shots",
-                ylabel  = "Relative difference with mean cost function ",
-                leg_loc = "upper left",
-                ylim    = (-max([(brute_cost[j] - mean_eig[j]) / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))]),
-                           0.5*max([(brute_cost[j] - mean_eig[j]) / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))])),
-                leg_col = 3,
-                save_as = save_name)
+# plot_comparison(x       = [np.sqrt(df["shots"]) for df in df_plot],
+#                 y       = [(mean_eig[j] + df_plot[j]["cost"]) / (abs(mean_eig[j] - brute_cost[j]))
+#                            for j in range(len(brute_cost))],
+#                 legend  = legend_list,
+#                 title   = r"Relative difference with mean cost function value vs $\sqrt{shots}$",
+#                 xlabel  = r"\sqrt{shots}",
+#                 ylabel  = "Relative difference with mean cost function ",
+#                 leg_loc = "upper left",
+#                 ylim    = (-max([(brute_cost[j] - mean_eig[j]) / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))]),
+#                            0.5*max([(brute_cost[j] - mean_eig[j]) / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))])),
+#                 leg_col = 3,
+#                 save_as = save_name)
+
+
+# # Relative difference with mean cost function value vs 1/shots
+# # (Brute cost is positive)
+# save_name = folder_name + "rel_diff_mean_vs_1_o_shots"
+
+# plot_comparison(x       = [1 / df["shots"] for df in df_plot],
+#                 y       = [(mean_eig[j] + df_plot[j]["cost"]) / (abs(mean_eig[j] - brute_cost[j]))
+#                            for j in range(len(brute_cost))],
+#                 legend  = legend_list,
+#                 title   = r"Relative difference with mean cost function value vs $\sqrt{shots}$",
+#                 xlabel  = "shots",
+#                 ylabel  = "Relative difference with mean cost function ",
+#                 leg_loc = "upper left",
+#                 ylim    = (-max([(brute_cost[j] - mean_eig[j]) / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))]),
+#                            0.5*max([(brute_cost[j] - mean_eig[j]) / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))])),
+#                 leg_col = 3,
+#                 save_as = save_name)
 
 
 # # Normalized relative difference with mean cost function value vs sqrt(Hilbert space dimension/shots)
@@ -477,22 +483,22 @@ plot_comparison(x       = [1 / df["shots"] for df in df_plot],
 #                 leg_col = 3,
 #                 save_as = save_name)
 
-# Normalized relative difference with mean cost function value vs 1/sqrt(shots)   
-# (Brute cost is positive)
-save_name = folder_name + "rel_diff_mean_times_std_eig_vs_inv_shots"
+# # Normalized relative difference with mean cost function value vs 1/sqrt(shots)   
+# # (Brute cost is positive)
+# save_name = folder_name + "rel_diff_mean_times_std_eig_vs_inv_shots"
 
-plot_comparison(x       = [1 / np.sqrt(df["shots"]) for df in df_plot],
-                y       = [(mean_eig[j] + df_plot[j]["cost"]) * std_dev_eig[j] / (abs(mean_eig[j] - brute_cost[j]))
-                           for j in range(len(brute_cost))],
-                legend  = legend_list,
-                title   = r"Normalized relative difference with mean cost function value vs $\frac{1}{\sqrt{Shots}}$",
-                xlabel  = r"$1 / \sqrt{Shots}$",
-                ylabel  = r"$\frac{(\bar{eig} - cost) \times \sigma(eig)}{\bar{eig} - opt(eig)}$",
-                leg_loc = "upper left",
-                ylim    = (-max([(brute_cost[j] - mean_eig[j]) * std_dev_eig[j] / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))]),
-                           0.5*max([(brute_cost[j] - mean_eig[j]) * std_dev_eig[j] / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))])),
-                leg_col = 3,
-                save_as = save_name)
+# plot_comparison(x       = [1 / np.sqrt(df["shots"]) for df in df_plot],
+#                 y       = [(mean_eig[j] + df_plot[j]["cost"]) * std_dev_eig[j] / (abs(mean_eig[j] - brute_cost[j]))
+#                            for j in range(len(brute_cost))],
+#                 legend  = legend_list,
+#                 title   = r"Normalized relative difference with mean cost function value vs $\frac{1}{\sqrt{Shots}}$",
+#                 xlabel  = r"$1 / \sqrt{Shots}$",
+#                 ylabel  = r"$\frac{(\bar{eig} - cost) \times \sigma(eig)}{\bar{eig} - opt(eig)}$",
+#                 leg_loc = "upper left",
+#                 ylim    = (-max([(brute_cost[j] - mean_eig[j]) * std_dev_eig[j] / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))]),
+#                            0.5*max([(brute_cost[j] - mean_eig[j]) * std_dev_eig[j] / (abs(mean_eig[j] - brute_cost[j])) for j in range(len(brute_cost))])),
+#                 leg_col = 3,
+#                 save_as = save_name)
 
 
 # # Normalized relative difference with mean cost function value vs sqrt(Hilbert space dimension/shots)
@@ -512,22 +518,22 @@ plot_comparison(x       = [1 / np.sqrt(df["shots"]) for df in df_plot],
 #                 leg_col = 3,
 #                 save_as = save_name)
 
-# Normalized relative difference with mean cost function value vs 1/sqrt(shots)   
-# (Brute cost is positive)
-save_name = folder_name + "rel_diff_mean_o_std_eig_vs_inv_shots"
+# # Normalized relative difference with mean cost function value vs 1/sqrt(shots)   
+# # (Brute cost is positive)
+# save_name = folder_name + "rel_diff_mean_o_std_eig_vs_inv_shots"
 
-plot_comparison(x       = [1 / np.sqrt(df["shots"]) for df in df_plot],
-                y       = [(mean_eig[j] + df_plot[j]["cost"]) / ((abs(mean_eig[j] - brute_cost[j])) * std_dev_eig[j])
-                           for j in range(len(brute_cost))],
-                legend  = legend_list,
-                title   = r"Normalized relative difference with mean cost function value vs $\frac{1}{\sqrt{Shots}}$",
-                xlabel  = r"$1 / \sqrt{Shots}$",
-                ylabel  = r"$\frac{(\bar{eig} - cost)}{(\bar{eig} - opt(eig)) \times \sigma(eig)}$",
-                leg_loc = "upper left",
-                ylim    = (-max([(brute_cost[j] - mean_eig[j]) / (abs(mean_eig[j] - brute_cost[j]) * std_dev_eig[j]) for j in range(len(brute_cost))]),
-                           0.5*max([(brute_cost[j] - mean_eig[j]) / (abs(mean_eig[j] - brute_cost[j]) * std_dev_eig[j]) for j in range(len(brute_cost))])),
-                leg_col = 3,
-                save_as = save_name)
+# plot_comparison(x       = [1 / np.sqrt(df["shots"]) for df in df_plot],
+#                 y       = [(mean_eig[j] + df_plot[j]["cost"]) / ((abs(mean_eig[j] - brute_cost[j])) * std_dev_eig[j])
+#                            for j in range(len(brute_cost))],
+#                 legend  = legend_list,
+#                 title   = r"Normalized relative difference with mean cost function value vs $\frac{1}{\sqrt{Shots}}$",
+#                 xlabel  = r"$1 / \sqrt{Shots}$",
+#                 ylabel  = r"$\frac{(\bar{eig} - cost)}{(\bar{eig} - opt(eig)) \times \sigma(eig)}$",
+#                 leg_loc = "upper left",
+#                 ylim    = (-max([(brute_cost[j] - mean_eig[j]) / (abs(mean_eig[j] - brute_cost[j]) * std_dev_eig[j]) for j in range(len(brute_cost))]),
+#                            0.5*max([(brute_cost[j] - mean_eig[j]) / (abs(mean_eig[j] - brute_cost[j]) * std_dev_eig[j]) for j in range(len(brute_cost))])),
+#                 leg_col = 3,
+#                 save_as = save_name)
 
 
 # # Mean difference with optimal cost function value vs sqrt(Hilbert space dimension/shots)
