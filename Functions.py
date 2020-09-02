@@ -280,6 +280,7 @@ def time_vs_shots(shots,
                   cost,
                   alpha = 0.5,
                   algorithm = "VQE",
+                  method = "COBYLA",
                   theta = 1,
                   verbosity = False):
     """Returns the time taken to solve a VQE problem
@@ -297,9 +298,10 @@ def time_vs_shots(shots,
      - 'cvar': conditional value at risk = mean of the
                alpha*shots lowest eigenvalues,
     alpha: 'cvar' alpha parameter
+    algorithm: the optimization algorithm to be used (VQE or QAOA),
+    method: the classical optimizar (COBYLA or SLSQP),
     theta: the ansatz initial parameters. If set to 1, the 
         standard ry ansatz parameters are used,
-    algorithm: the optimization algorithm to be used (VQE or QAOA),
     verbosity: activate/desactivate some control printouts.
     
     Output:
@@ -329,10 +331,12 @@ def time_vs_shots(shots,
     # Time starts with the optimization
     start_time = time.time()
 
-    # Classical optimizer tuning
+    print("method: {0}".format(method))
+
+    # Classical optimizer tuning - COBYLA
     res = minimize(fun     = cost_function_cobyla, 
                    x0      = theta.ravel(),       # the 'params' argument of 'cost_function_cobyla'
-                   method  = 'COBYLA',            # we want to use the COBYLA optimization algorithm
+                   method  = method, #'COBYLA',            # we want to use the COBYLA optimization algorithm
                    options = {'maxiter': 10000},  # maximum number of iterations
                    tol     = 0.0001,              # tolerance or final accuracy in the optimization 
                    args    = (weights, 

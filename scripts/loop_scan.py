@@ -42,7 +42,7 @@ python3 loop_scan.py cost 1   10 40 VQE
 python3 loop_scan.py cost 1   10 45 VQE
 
 QAOA
----
+----
 10-qbits problem
 python3 loop_scan.py cost 1   10 22 QAOA
 
@@ -60,6 +60,11 @@ python3 loop_scan.py cost 1   16 60 QAOA
 
 18-qbits problem
 python3 loop_scan.py cost 1   18 76 QAOA
+
+QAOA - SLSQP
+------------
+10-qbits problem
+python3 loop_scan.py cost 1   10 22 QAOA SLSQP
 """
 
 import sys, os
@@ -74,6 +79,7 @@ alpha      = sys.argv[2]
 n_vertices = sys.argv[3]
 n_edges    = sys.argv[4]
 n_algo     = sys.argv[5]
+n_method   = sys.argv[6]
 
 # keep the ratio n_edges/max(n_edges) constant for all n_vertices values
 #n_edges = int(0.5*int(n_vertices)*(int(n_vertices)-1) * 0.5)
@@ -81,11 +87,12 @@ n_algo     = sys.argv[5]
 shots_list = [1, 2, 4, 8, 12, 16, 24, 32, 64, 96, 128, 192, 256, 512]
 
 for shots in shots_list:
-    command = "python3.7 scan_script.py {0} {1} {2} {3} {4} {5}&".format(shots,
+    command = "python3.7 scan_script.py {0} {1} {2} {3} {4} {5} {6}&".format(shots,
                                                                      cost,
                                                                      alpha,
                                                                      n_vertices,
                                                                      n_edges,
-                                                                     n_algo)
+                                                                     n_algo,
+                                                                     n_method)
     print(command)
     os.system(command)

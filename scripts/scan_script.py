@@ -16,14 +16,15 @@ n_n = 10
 n_E = int(0.5*n_n*(n_n-1))
 
 # Input arguments
-if len(sys.argv) < 5:
+if len(sys.argv) < 6:
     raise ValueError("""Please insert 
     number of shots 
     cost function type 
     CVaR alpha value
     number of vertices
     number of edges
-    algorithm""")
+    algorithm
+    classical method""")
 
 n_shots = sys.argv[1]
 n_cost  = sys.argv[2]
@@ -31,6 +32,7 @@ n_alpha = sys.argv[3]
 n_n     = sys.argv[4]
 n_E     = sys.argv[5]
 n_algo  = sys.argv[6]
+n_method = sys.argv[7]
 
 # Print input values
 print("Shots:         {0}".format(n_shots))
@@ -39,6 +41,7 @@ print("Alpha:         {0}".format(n_alpha))
 print("N vertices:    {0}".format(n_n))
 print("N edges:       {0}".format(n_E))
 print("Algorithm:     {0}".format(n_algo))
+print("Method:        {0}".format(n_method))
     
 # Create random Max-Cut problem
 # Number of vertices
@@ -68,7 +71,7 @@ COST          = n_cost
 ALPHA         = float(n_alpha)
 N_repetitions = 100
 ALGORITHM     = n_algo
-
+METHOD        = n_method
 
 # Create folder for output file
 folder_name = ""
@@ -94,7 +97,8 @@ for rep in range(N_repetitions):
                            FINAL_EVAL,
                            COST,
                            ALPHA,
-                           ALGORITHM)
+                           ALGORITHM,
+                           METHOD)
 
     if rep % 20 == 0:
         print("Done with", str(SHOTS), "shots, repetition", rep)
