@@ -44,22 +44,32 @@ python3 loop_scan.py cost 1   10 45 VQE
 QAOA
 ----
 10-qbits problem
-python3 loop_scan.py cost 1   10 22 QAOA
+python3 loop_scan.py cost 1   10 22 QAOA COBYLA
 
 11-qbits problem
-python3 loop_scan.py cost 1   11 27 QAOA
+python3 loop_scan.py cost 1   11 27 QAOA COBYLA
 
 12-qbits problem
-python3 loop_scan.py cost 1   12 33 QAOA
+python3 loop_scan.py cost 1   12 33 QAOA COBYLA
 
 13-qbits problem
-python3 loop_scan.py cost 1   13 39 QAOA
+python3 loop_scan.py cost 1   13 39 QAOA COBYLA
 
 16-qbits problem
-python3 loop_scan.py cost 1   16 60 QAOA
+python3 loop_scan.py cost 1   16 60 QAOA COBYLA
 
 18-qbits problem
-python3 loop_scan.py cost 1   18 76 QAOA
+python3 loop_scan.py cost 1   18 76 QAOA COBYLA
+
+Alternative 10-qbits problems
+python3 loop_scan.py cost 1   10 10 QAOA COBYLA
+python3 loop_scan.py cost 1   10 15 QAOA COBYLA
+python3 loop_scan.py cost 1   10 20 QAOA COBYLA
+python3 loop_scan.py cost 1   10 25 QAOA COBYLA
+python3 loop_scan.py cost 1   10 30 QAOA COBYLA
+python3 loop_scan.py cost 1   10 35 QAOA COBYLA
+python3 loop_scan.py cost 1   10 40 QAOA COBYLA
+python3 loop_scan.py cost 1   10 45 QAOA COBYLA
 
 QAOA - SLSQP
 ------------
@@ -73,7 +83,7 @@ n_vertices = 10
 n_edges    = 20
 
 if len(sys.argv) < 5:
-    raise ValueError("Please insert:\n cost function type\n CVaR alpha value\n number of vertices\n number of edges\ algorithm")
+    raise ValueError("Please insert:\n cost function type\n CVaR alpha value\n number of vertices\n number of edges\ algorithm\ classical optimizer")
 cost       = sys.argv[1]
 alpha      = sys.argv[2]
 n_vertices = sys.argv[3]
@@ -87,12 +97,12 @@ n_method   = sys.argv[6]
 shots_list = [1, 2, 4, 8, 12, 16, 24, 32, 64, 96, 128, 192, 256, 512]
 
 for shots in shots_list:
-    command = "python3.7 scan_script.py {0} {1} {2} {3} {4} {5} {6}&".format(shots,
-                                                                     cost,
-                                                                     alpha,
-                                                                     n_vertices,
-                                                                     n_edges,
-                                                                     n_algo,
-                                                                     n_method)
+    command = "python3.7 scan_script.py {0} {1} {2} {3} {4} {5} {6} &".format(shots,
+                                                                              cost,
+                                                                              alpha,
+                                                                              n_vertices,
+                                                                              n_edges,
+                                                                              n_algo,
+                                                                              n_method)
     print(command)
     os.system(command)
