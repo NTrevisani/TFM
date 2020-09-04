@@ -177,8 +177,8 @@ def QAOA_circuit(gamma_beta, QUBO, depth):
             for j in range(i,n_vertices):
                 if QUBO[i,j] != 0:
                     circuit.cu1(-2*gamma[k]*QUBO[i,j], i, j)
-                    circuit.u1(gamma[k], i)
-                    circuit.u1(gamma[k], j)
+                    circuit.u1(gamma[k]*QUBO[i,j], i)
+                    circuit.u1(gamma[k]*QUBO[i,j], j)
         circuit.barrier()
         
         # then apply the single qubit X-rotations with angle beta to all qubits
