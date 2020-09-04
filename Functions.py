@@ -331,7 +331,7 @@ def time_vs_shots(shots,
     # Time starts with the optimization
     start_time = time.time()
 
-    print("method: {0}".format(method))
+    # print("method: {0}".format(method))
 
     # Classical optimizer tuning - COBYLA
     res = minimize(fun     = cost_function_cobyla, 
